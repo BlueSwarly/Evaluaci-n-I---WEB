@@ -5,9 +5,9 @@ const app = express();
 const port = 3124;
 
 app.use(express.json());
-app.use('/api/paquetes', paquetesRoutes);
+app.use('/api/paquetes', paqueteRoutes);
 
 app.listen(port, () => {
-    console.log('Servidor escuchando en http://localhost:${port}');
+    console.log(`Servidor ejecutándose en http://localhost:${port}`);
 })
 

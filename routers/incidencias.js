@@ -11,6 +11,6 @@ router.post('/', CrearIncidencia);
 //cuando llega una peticion get se ejecuta ListarIncidencias
 router.get('/', ListarIncidencias);
 
-router.get('/', BuscarIncidenciasPorId);
+router.get('/:id', BuscarIncidenciasPorId);
 
 module.exports = router;

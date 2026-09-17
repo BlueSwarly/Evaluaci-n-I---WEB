@@ -1,6 +1,6 @@
-const { generarId } = require('../utils/helpers');
 
 const incidencias = [];
+let contadorID = 1;
 
 const CrearIncidencia = (req, res) => {
 
@@ -25,7 +25,7 @@ const CrearIncidencia = (req, res) => {
     }
 
     const nuevaIncidencia = {
-        id: generarId(), //Generamos una identificacion para el objeto
+        id: contadorID++, //Generamos una identificacion para el objeto
         empleado: empleado.trim(),
         area: area.trim(),
         descripcion: descripcion.trim(),
@@ -35,7 +35,7 @@ const CrearIncidencia = (req, res) => {
 
     incidencias.push(nuevaIncidencia);
 
-    res.status(400).json({ mensaje: "Incidencia registrada correctamente" });
+    res.status(200).json({ mensaje: "Incidencia registrada correctamente" });
 }
 
 const ListarIncidencias = (req, res) => {
