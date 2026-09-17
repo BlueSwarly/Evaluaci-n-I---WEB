@@ -5,7 +5,6 @@ let contadorID = 1;
 const CrearIncidencia = (req, res) => {
 
     const { empleado, area, descripcion, prioridad } = req.body;
-    const nuevoPaquete = { empleado, area, descripcion, prioridad };
 
     if (!empleado || !area || !descripcion || !prioridad) {
         return res.status(400).json({ error: 'Faltan datos obligatorios' })
