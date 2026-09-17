@@ -19,4 +19,7 @@ router.put('/:id/estado' , CambiarEstado);
 
 router.delete('/:id', EliminarIncidencia);
 
+router.get('/', ObtenerEstadisticasIncidencias);
+
+router.get('/:id/clasificar/', ClasificarIncidenciaPorId);
 module.exports = router;
