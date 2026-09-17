@@ -52,7 +52,7 @@ const BuscarIncidenciasPorId = (req, res) => {
     );
     if (!IncidenciaHallada){
         return res.status(404).json({
-            message: "Incidencia no encontrada"
+            mensaje: "Incidencia no encontrada"
         });
     }
     return res.status(200).json(IncidenciaHallada);
@@ -79,8 +79,8 @@ const CambiarEstado = (req, res) => {
         case "pendiente":
             nuevoEstado = "Pendiente";
             break;
-        case "en proceso":
-            nuevoEstado = "En Proceso";
+        case "enproceso":
+            nuevoEstado = "enProceso";
             break;
         case "resuelta":
             nuevoEstado = "Resuelta";
@@ -90,7 +90,7 @@ const CambiarEstado = (req, res) => {
             break;
         default:
             return res.status(400).json({
-                mensaje: "Estado invalido. Permitidos: Pendiente, En Proceso, Resuelta, Cancelada"
+                mensaje: "Estado invalido. Permitidos: Pendiente, enProceso, Resuelta, Cancelada"
             });
     }
 
@@ -119,11 +119,75 @@ const EliminarIncidencia = (req, res) => {
 
 };
 
+const ObtenerEstadisticasIncidencias = (req, res) => {
+    //objeto que funciona como diccionario para mapear los estados de las incidencias a las claves del objeto de estadísticas
+    const estadoAEstadistica = {
+        Pendiente: 'pendientes',
+        Resuelta: 'resueltas',
+        enProceso: 'enProceso',
+        Cancelada: 'canceladas'
+    };
+
+    //usamos reduce para contar las incidencias por estado y generar el objeto de estadísticas
+    //asi evitamos usar variables para contar cada estado.
+    const estadisticas = incidencias.reduce((resultado, { estado }) => {
+        //obtenemos la clave correspondiente al estado de la incidencia
+        const clave = estadoAEstadistica[estado]; 
+
+        //si la clave existe se incrementa el contador correspondiente
+        //si no existe, no se hace nada.
+        if (clave) {
+            resultado[clave] += 1;
+        }
+
+        return resultado;
+    }, 
+    //inicializamos el objeto de estadísticas con todos los contadores en 0
+    {
+        total: incidencias.length,
+        pendientes: 0,
+        resueltas: 0,
+        enProceso: 0,
+        canceladas: 0
+    });
+
+    return res.status(200).json(estadisticas);
+};
+
+const ClasificarIncidenciaPorId = (req, res) => {
+    const id = Number(req.params.id);
+    const incidencia = incidencias.find((incidencia) => incidencia.id === id);
+
+    if (!incidencia) {
+        return res.status(404).json({ error: 'Incidencia no encontrada' });
+    }
+
+    // Clasificación de la incidencia según su prioridad
+    let clasificacion;
+    switch (incidencia.prioridad) {
+        case 'Alta':
+            clasificacion = 'Crítica';
+            break;
+        case 'Media':
+            clasificacion = 'Importante';
+            break;
+        case 'Baja':
+            clasificacion = 'Normal';
+            break;
+        default:
+            clasificacion = 'Desconocida';
+    }
+
+    return res.status(200).json({ id: incidencia.id, clasificacion });
+};
+
 //Se necesita para utilizar las funciones desde las rutas
 module.exports = {
     CrearIncidencia,
     ListarIncidencias,
     BuscarIncidenciasPorId,
     CambiarEstado,
-    EliminarIncidencia
+    EliminarIncidencia,
+    ObtenerEstadisticasIncidencias,
+    ClasificarIncidenciaPorId
 };
