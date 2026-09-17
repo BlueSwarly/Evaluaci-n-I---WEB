@@ -5,7 +5,8 @@ const {
     CrearIncidencia,
     ListarIncidencias,
     BuscarIncidenciasPorId,
-    CambiarEstado
+    CambiarEstado,
+    EliminarIncidencia
 } = require('../controllers/incidenciasController');
 
 router.post('/', CrearIncidencia);
@@ -14,5 +15,8 @@ router.get('/', ListarIncidencias);
 
 router.get('/:id', BuscarIncidenciasPorId);
 
-router.put('/:id/estado' , CambiarEstado)
+router.put('/:id/estado' , CambiarEstado);
+
+router.delete('/:id', EliminarIncidencia);
+
 module.exports = router;
