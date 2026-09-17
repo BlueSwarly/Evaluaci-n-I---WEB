@@ -58,9 +58,53 @@ const BuscarIncidenciasPorId = (req, res) => {
     return res.status(200).json(IncidenciaHallada);
 };
 
+const CambiarEstado = (req, res) => {
+    const id = parseInt(req.params.id);
+    const { estado } = req.body;
+
+    if (!estado || typeof estado !== 'string' || estado.trim() === "") {
+        return res.status(400).json({ mensaje: "El estado es requerido." });
+    }
+    
+    const incidencia = incidencias.find((inc) => inc.id === id);
+
+    if (!incidencia) {
+        return res.status(404).json({ mensaje: "Incidencia no encontrada" });
+    }
+
+    const estadoLimpio = estado.trim().toLowerCase();
+    let nuevoEstado = "";
+
+    switch (estadoLimpio) {
+        case "pendiente":
+            nuevoEstado = "Pendiente";
+            break;
+        case "en proceso":
+            nuevoEstado = "En Proceso";
+            break;
+        case "resuelta":
+            nuevoEstado = "Resuelta";
+            break;
+        case "cancelada":
+            nuevoEstado = "Cancelada";
+            break;
+        default:
+            return res.status(400).json({
+                mensaje: "Estado invalido. Permitidos: Pendiente, En Proceso, Resuelta, Cancelada"
+            });
+    }
+
+    incidencia.estado = nuevoEstado;
+    return res.status(200).json({
+        mensaje: "Estado actualizado correctamente",
+        incidencia
+    });
+};
+
 //Se necesita para utilizar las funciones desde las rutas
 module.exports = {
     CrearIncidencia,
     ListarIncidencias,
-    BuscarIncidenciasPorId
+    BuscarIncidenciasPorId,
+    CambiarEstado
 };
