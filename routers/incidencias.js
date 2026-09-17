@@ -6,6 +6,7 @@ const {
     ListarIncidencias,
     BuscarIncidenciasPorId,
     ObtenerEstadisticasIncidencias,
+    ClasificarIncidenciaPorId
 } = require('../controllers/incidenciasController');
 
 router.post('/', CrearIncidencia);
@@ -15,4 +16,6 @@ router.get('/', ListarIncidencias);
 router.get('/', BuscarIncidenciasPorId);
 
 router.get('/', ObtenerEstadisticasIncidencias);
+
+router.get('/:id/clasificar/', ClasificarIncidenciaPorId);
 module.exports = router;

@@ -93,11 +93,38 @@ const ObtenerEstadisticasIncidencias = (req, res) => {
     return res.status(200).json(estadisticas);
 };
 
+const ClasificarIncidenciaPorId = (req, res) => {
+    const id = Number(req.params.id);
+    const incidencia = incidencias.find((incidencia) => incidencia.id === id);
+
+    if (!incidencia) {
+        return res.status(404).json({ error: 'Incidencia no encontrada' });
+    }
+
+    // Clasificación de la incidencia según su prioridad
+    let clasificacion;
+    switch (incidencia.prioridad) {
+        case 'Alta':
+            clasificacion = 'Crítica';
+            break;
+        case 'Media':
+            clasificacion = 'Importante';
+            break;
+        case 'Baja':
+            clasificacion = 'Normal';
+            break;
+        default:
+            clasificacion = 'Desconocida';
+    }
+
+    return res.status(200).json({ id: incidencia.id, clasificacion });
+}
 
 //Se necesita para utilizar las funciones desde las rutas
 module.exports = {
     CrearIncidencia,
     ListarIncidencias,
     BuscarIncidenciasPorId,
-    ObtenerEstadisticasIncidencias
+    ObtenerEstadisticasIncidencias,
+    ClasificarIncidenciaPorId
 };
