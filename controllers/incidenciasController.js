@@ -43,8 +43,24 @@ const ListarIncidencias = (req, res) => {
     return res.status(200).json(incidencias);
 };
 
+const BuscarIncidenciasPorId = (req, res) => {
+    //Se reconoce el id
+    const id= Number(req.params.id);
+    //Busca el id de la incidencia en el arreglo
+    const IncidenciaHallada = incidencias.find(
+        (incidencia) => incidencia.id === id
+    );
+    if (!IncidenciaHallada){
+        return res.status(404).json({
+            message: "Incidencia no encontrada"
+        });
+    }
+    return res.status(200).json(IncidenciaHallada);
+};
+
 //Se necesita para utilizar las funciones desde las rutas
 module.exports = {
     CrearIncidencia,
-    ListarIncidencias
+    ListarIncidencias,
+    BuscarIncidenciasPorId
 };
