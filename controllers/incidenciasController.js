@@ -58,9 +58,46 @@ const BuscarIncidenciasPorId = (req, res) => {
     return res.status(200).json(IncidenciaHallada);
 };
 
+const ObtenerEstadisticasIncidencias = (req, res) => {
+    //objeto que funciona como diccionario para mapear los estados de las incidencias a las claves del objeto de estadísticas
+    const estadoAEstadistica = {
+        Pendiente: 'pendientes',
+        Resuelta: 'resueltas',
+        enProceso: 'enProceso',
+        Cancelada: 'canceladas'
+    };
+
+    //usamos reduce para contar las incidencias por estado y generar el objeto de estadísticas
+    //asi evitamos usar variables para contar cada estado.
+    const estadisticas = incidencias.reduce((resultado, { estado }) => {
+        //obtenemos la clave correspondiente al estado de la incidencia
+        const clave = estadoAEstadistica[estado]; 
+        
+        //si la clave existe se incrementa el contador correspondiente
+        //si no existe, no se hace nada.
+        if (clave) {
+            resultado[clave] += 1;
+        }
+
+        return resultado;
+    }, 
+    //inicializamos el objeto de estadísticas con todos los contadores en 0
+    {
+        total: incidencias.length,
+        pendientes: 0,
+        resueltas: 0,
+        enProceso: 0,
+        canceladas: 0
+    });
+
+    return res.status(200).json(estadisticas);
+};
+
+
 //Se necesita para utilizar las funciones desde las rutas
 module.exports = {
     CrearIncidencia,
     ListarIncidencias,
-    BuscarIncidenciasPorId
+    BuscarIncidenciasPorId,
+    ObtenerEstadisticasIncidencias
 };

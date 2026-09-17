@@ -4,7 +4,8 @@ const router = express.Router();
 const {
     CrearIncidencia,
     ListarIncidencias,
-    BuscarIncidenciasPorId
+    BuscarIncidenciasPorId,
+    ObtenerEstadisticasIncidencias,
 } = require('../controllers/incidenciasController');
 
 router.post('/', CrearIncidencia);
@@ -13,4 +14,5 @@ router.get('/', ListarIncidencias);
 
 router.get('/', BuscarIncidenciasPorId);
 
+router.get('/', ObtenerEstadisticasIncidencias);
 module.exports = router;
